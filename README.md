@@ -1,10 +1,10 @@
-# Manage SSL certificates for IBM Cloud VPC Load Balancer
+# Manage SSL certificates for IBM Cloud VPC Application Load Balancer
 
 ### Architecture Goals
 
 1. Given an [IBM Cloud VPC Application Load Balancer as a Service (LBaaS)](https://cloud.ibm.com/docs/vpc?topic=vpc-load-balancers), create the minimum required services/configurations to provide a certificate for the Listener.
-3 Demonstrate how the [IBM Cloud Certificate Management Service (CMS)](https://www.ibm.com/cloud/certificate-manager) is required to order/hold the certificate. 
-4. Show how to create an auth policy between LBaaS and CMS is also defined to enable the LBaaS LISTENER to read/write to the CMS.
+2. Demonstrate how the [IBM Cloud Certificate Management Service (CMS)](https://cloud.ibm.com/docs/certificate-manager) is required to order/hold the certificate. 
+3. Show how to create an auth policy between LBaaS and CMS is also defined to enable the LBaaS LISTENER to read/write to the CMS.
 
 ---
 ### Description
