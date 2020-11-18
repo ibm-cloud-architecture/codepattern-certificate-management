@@ -9,7 +9,7 @@
 ---
 ### Description
 
-This code pattern provides the necessary scripts to provision a basic VPC network with a Load Balancer as a service, and instance of IBM Certificate Manager Service (CMS) with access control policies for roles and for LBaaS to read from CMS. Then a certificate is ordered and loaded into the CMS service instance.
+This code pattern provides the necessary scripts to provision a basic VPC network with an Application Load Balancer as a service, and instance of IBM Certificate Manager Service (CMS) with access control policies for roles and for LBaaS to read from CMS. Then a certificate is ordered and loaded into the CMS service instance.
 
 <kbd>![Serviced-scenario](./imgs/codepattern-certificate-management.png)</kbd>
 
