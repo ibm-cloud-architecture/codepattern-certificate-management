@@ -83,7 +83,7 @@ EOT
 
   }
 
-  depends_on = ["ibm_is_lb.lb", "null_resource.import_certificate"]
+  depends_on = [ibm_is_lb.lb, null_resource.import_certificate]
 }
 
 ################################################################################
@@ -100,24 +100,24 @@ EOT
 ################################################################################
 
 resource "ibm_iam_access_group" "access_group" {
-  name = "${var.access_group}"
+  name = var.access_group
 }
 
 
 resource "ibm_iam_access_group_members" "manager_access_members" {
-  access_group_id = "${ibm_iam_access_group.access_group.id}"
-  ibm_ids         = "${var.access_members}"
+  access_group_id = ibm_iam_access_group.access_group.id
+  ibm_ids         = var.access_members
 }
 
 resource "ibm_iam_access_group_policy" "policy" {
 
-  access_group_id = "${ibm_iam_access_group.access_group.id}"
-  roles           = "${var.access_roles}"
+  access_group_id = ibm_iam_access_group.access_group.id
+  roles           = var.access_roles
 
-  resources = [{
+  resources {
     service              = "cloudcerts"
-    resource_instance_id = "${element(split(":", ibm_resource_instance.cms.id), 7)}"
-  }]
+    resource_instance_id = element(split(":", ibm_resource_instance.cms.id), 7)
+  }
 
 }
 

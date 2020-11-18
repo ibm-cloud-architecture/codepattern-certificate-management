@@ -4,13 +4,18 @@
 ##############################################################################
 
 
+# Create the Resource Group that is used when deploying the VPC
+resource "ibm_resource_group" "group" {
+  name = var.resource_group
+}
+
 ##############################################################################
 # Create ssh key for all virtual servers.
 ##############################################################################
 
 resource "ibm_is_ssh_key" "ssh" {
   name       = "ssh-${var.unique_id}"
-  public_key = "${var.ssh_key}"
+  public_key = var.ssh_key
 }
 
 ##############################################################################
@@ -23,7 +28,7 @@ resource "ibm_is_ssh_key" "ssh" {
 resource "ibm_is_vpc" "vpc" {
   name           = "vpc-${var.unique_id}"
   classic_access = false
-  resource_group = "${data.ibm_resource_group.group.id}"
+  resource_group = ibm_resource_group.group.id
 }
 
 ##############################################################################
@@ -34,9 +39,9 @@ resource "ibm_is_vpc" "vpc" {
 ##############################################################################
 
 resource "ibm_is_vpc_address_prefix" "vpc_prefix" {
-  name = "vpc_prefix-${var.unique_id}"
+  name = "vpc-prefix-${var.unique_id}"
   zone = "${var.region}-1"
-  vpc  = "${ibm_is_vpc.vpc.id}"
+  vpc  = ibm_is_vpc.vpc.id
   cidr = "10.10.1.0/24"
 }
 
@@ -49,10 +54,10 @@ resource "ibm_is_vpc_address_prefix" "vpc_prefix" {
 
 resource "ibm_is_subnet" "subnet" {
   name            = "vpc-subnet-${var.unique_id}"
-  vpc             = "${ibm_is_vpc.vpc.id}"
+  vpc             = ibm_is_vpc.vpc.id
   zone            = "${var.region}-1"
   ipv4_cidr_block = "10.10.1.0/24"
-  depends_on      = ["ibm_is_vpc_address_prefix.vpc_prefix"]
+  depends_on      = [ibm_is_vpc_address_prefix.vpc_prefix]
 }
 
 ##############################################################################
@@ -62,15 +67,15 @@ resource "ibm_is_subnet" "subnet" {
 resource "ibm_is_instance" "vsi" {
 
   name    = "vsi-${var.unique_id}"
-  image   = "${var.image_template_id}"
-  profile = "${var.machine_type}"
-  vpc     = "${ibm_is_vpc.vpc.id}"
+  image   = var.image_template_id
+  profile = var.machine_type
+  vpc     = ibm_is_vpc.vpc.id
   zone    = "${var.region}-1"
-  keys    = ["${ibm_is_ssh_key.ssh.id}"]
+  keys    = [ibm_is_ssh_key.ssh.id]
 
-  primary_network_interface = {
+  primary_network_interface {
     name   = "network-if"
-    subnet = "${ibm_is_subnet.subnet.id}"
+    subnet = ibm_is_subnet.subnet.id
   }
 
 }

@@ -43,7 +43,7 @@ echo $CERT >> cert/cert.txt
 
    EOT
   }
-  depends_on = ["ibm_resource_instance.cms", "ibm_is_lb.lb"]
+  depends_on = [ibm_resource_instance.cms, ibm_is_lb.lb]
 }
 
 ################################################################################
@@ -56,10 +56,10 @@ echo $CERT >> cert/cert.txt
 data "null_data_source" "cert_id" {
 
   inputs = {
-     openssl_cert = "${file("${path.module}/cert/cert_id.txt")}"
+     openssl_cert = file("${path.module}/cert/cert_id.txt")
   }
 
-  depends_on = ["null_resource.import_certificate"]
+  depends_on = [null_resource.import_certificate]
 
 }
 

@@ -12,9 +12,9 @@ resource "ibm_resource_instance" "cms" {
   name              = "cms-${var.unique_id}"
   service           = "cloudcerts"
   plan              = "free"
-  location          = "${var.region}"
-  tags              = "${var.tags}"
-  resource_group_id = "${data.ibm_resource_group.group.id}"
+  location          = var.region
+  tags              = var.tags
+  resource_group_id = ibm_resource_group.group.id
   
   parameters = {
     "HMAC"            = true,

@@ -5,8 +5,8 @@
 resource "ibm_is_lb" "lb" {
   name           = "vpc-lb-${var.unique_id}"
   type           = "public"
-  subnets        = ["${ibm_is_subnet.subnet.id}"]
-  resource_group = "${data.ibm_resource_group.group.id}"
+  subnets        = [ibm_is_subnet.subnet.id]
+  resource_group = ibm_resource_group.group.id
 
 }
 
@@ -19,7 +19,7 @@ resource "ibm_is_lb" "lb" {
 
 resource "ibm_is_lb_pool" "pool" {
   name           = "pool-${var.unique_id}"
-  lb             = "${ibm_is_lb.lb.id}"
+  lb             = ibm_is_lb.lb.id
   algorithm      = "round_robin"
   protocol       = "http"
   health_delay   = "20"
@@ -36,12 +36,12 @@ resource "ibm_is_lb_pool" "pool" {
 ##############################################################################
 
 resource "ibm_is_lb_listener" "listener" {
-  lb                   = "${ibm_is_lb.lb.id}"
+  lb                   = ibm_is_lb.lb.id
   port                 = 8443
   protocol             = "https"
-  default_pool         = "${ibm_is_lb_pool.pool.id}"
-  certificate_instance = "${data.null_data_source.cert_id.outputs["openssl_cert"]}"
-  depends_on           = ["null_resource.reg_upload_certs"]
+  default_pool         = ibm_is_lb_pool.pool.id
+  certificate_instance = data.null_data_source.cert_id.outputs["openssl_cert"]
+# depends_on           = [null_resource.reg_upload_certs]
 }
 
 
@@ -53,10 +53,10 @@ resource "ibm_is_lb_listener" "listener" {
 ##############################################################################
 
 resource "ibm_is_lb_pool_member" "pool_member" {
-  lb             = "${ibm_is_lb.lb.id}"
-  pool           = "${ibm_is_lb_pool.pool.id}"
+  lb             = ibm_is_lb.lb.id
+  pool           = ibm_is_lb_pool.pool.id
   port           = "80"
-  target_address = "${ibm_is_instance.vsi.primary_network_interface.0.primary_ipv4_address}"
+  target_address = ibm_is_instance.vsi.primary_network_interface.0.primary_ipv4_address
   weight         = "50"
 }
 
